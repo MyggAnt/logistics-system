@@ -1,0 +1,336 @@
+# ==========================
+# Основные сущности
+# ==========================
+
+type Order {
+  id: ID!
+  orderId: String!
+  customerName: String!
+  destination: String!
+  status: OrderStatus!
+  priority: Priority!
+  totalAmount: Float
+  description: String
+  estimatedDelivery: String!
+  actualDelivery: String
+  vehicle: Vehicle
+  vehicleId: Int
+  products: [Product!]    # связь заказ -> товары
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Vehicle {
+  id: ID!
+  vehicleId: String!
+  plateNumber: String!
+  model: String!
+  capacity: Int!
+  status: VehicleStatus!
+  driverName: String
+  lastMaintenance: String!
+  nextMaintenance: String!
+  fuelLevel: Int!
+  mileage: Int!
+  notes: String
+  orders: [Order!]
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  price: Float!
+  sku: String!
+  quantity: Int!
+  reservedQuantity: Int!
+  availableQuantity: Int!
+  weight: Float
+  volume: Float
+  barcode: String
+  qrCode: String
+  rfidTag: String
+  abcClassification: String!
+  xyzClassification: String!
+  isPerishable: Boolean!
+  shelfLifeDays: Int
+  requiresRefrigeration: Boolean!
+  isHazardous: Boolean!
+  category: String
+  brand: String
+  manufacturer: String
+  countryOfOrigin: String
+  minStockLevel: Float
+  maxStockLevel: Float
+  notes: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Notification {
+  id: ID!
+  type: NotificationType!
+  title: String!
+  message: String!
+  read: Boolean!
+  action: Action
+  metadata: Metadata
+  createdAt: String!
+}
+
+# ==========================
+# Вспомогательные типы
+# ==========================
+
+type Action {
+  text: String!
+  url: String
+  orderId: Int
+  vehicleId: Int
+}
+
+type Metadata {
+  orderId: Int
+  vehicleId: Int
+  userId: Int
+}
+
+input ActionInput {
+  text: String!
+  url: String
+  orderId: Int
+  vehicleId: Int
+}
+
+input MetadataInput {
+  orderId: Int
+  vehicleId: Int
+  userId: Int
+}
+
+# ==========================
+# Статистика
+# ==========================
+
+type Statistics {
+  orders: OrderStats!
+  vehicles: VehicleStats!
+  revenue: RevenueStats!
+  products: ProductStats!
+}
+
+type OrderStats {
+  total: Int!
+  pending: Int!
+  inTransit: Int!
+  delivered: Int!
+  cancelled: Int!
+}
+
+type VehicleStats {
+  total: Int!
+  available: Int!
+  inUse: Int!
+  maintenance: Int!
+  outOfService: Int!
+}
+
+type RevenueStats {
+  current: Float!
+  previous: Float!
+  growth: Float!
+}
+
+type ProductStats {
+  total: Int!
+  perishable: Int!
+  refrigerated: Int!
+  hazardous: Int!
+}
+
+# ==========================
+# Enum
+# ==========================
+
+enum OrderStatus {
+  pending
+  in_transit
+  delivered
+  cancelled
+}
+
+enum VehicleStatus {
+  available
+  in_use
+  maintenance
+  out_of_service
+}
+
+enum Priority {
+  low
+  medium
+  high
+}
+
+enum NotificationType {
+  info
+  success
+  warning
+  error
+}
+
+# ==========================
+# Input для мутаций
+# ==========================
+
+input CreateOrderInput {
+  customerName: String!
+  destination: String!
+  priority: Priority!
+  totalAmount: Float
+  description: String
+  estimatedDelivery: String!
+  vehicleId: Int
+}
+
+input UpdateOrderInput {
+  customerName: String
+  destination: String
+  status: OrderStatus
+  priority: Priority
+  totalAmount: Float
+  description: String
+  estimatedDelivery: String
+  actualDelivery: String
+  vehicleId: Int
+}
+
+input CreateVehicleInput {
+  plateNumber: String!
+  model: String!
+  capacity: Int!
+  status: VehicleStatus!
+  driverName: String
+  nextMaintenance: String!
+  fuelLevel: Int
+  mileage: Int
+  notes: String
+}
+
+input UpdateVehicleInput {
+  plateNumber: String
+  model: String
+  capacity: Int
+  status: VehicleStatus
+  driverName: String
+  lastMaintenance: String
+  nextMaintenance: String
+  fuelLevel: Int
+  mileage: Int
+  notes: String
+}
+
+input CreateProductInput {
+  name: String!
+  description: String
+  price: Float!
+  sku: String!
+  quantity: Int!
+  category: String
+  brand: String
+}
+
+input UpdateProductInput {
+  name: String
+  description: String
+  price: Float
+  quantity: Int
+  category: String
+  brand: String
+}
+
+# ==========================
+# Queries
+# ==========================
+
+type Query {
+  # Orders
+  orders: [Order!]!
+  order(id: ID!): Order
+  ordersByStatus(status: OrderStatus!): [Order!]!
+  ordersByPriority(priority: Priority!): [Order!]!
+  
+  # Vehicles
+  vehicles: [Vehicle!]!
+  vehicle(id: ID!): Vehicle
+  vehiclesByStatus(status: VehicleStatus!): [Vehicle!]!
+  availableVehicles: [Vehicle!]!
+  
+  # Products
+  products: [Product!]!
+  product(id: ID!): Product
+  productsByCategory(category: String!): [Product!]!
+  
+  # Notifications
+  notifications: [Notification!]!
+  unreadNotifications: [Notification!]!
+  notification(id: ID!): Notification
+  
+  # Statistics
+  statistics: Statistics!
+  orderStatistics: OrderStats!
+  vehicleStatistics: VehicleStats!
+  revenueStatistics: RevenueStats!
+  productStatistics: ProductStats!
+}
+
+# ==========================
+# Mutations
+# ==========================
+
+type Mutation {
+  # Orders
+  createOrder(input: CreateOrderInput!): Order!
+  updateOrder(id: ID!, input: UpdateOrderInput!): Order!
+  deleteOrder(id: ID!): Boolean!
+  updateOrderStatus(id: ID!, status: OrderStatus!): Order!
+  
+  # Vehicles
+  createVehicle(input: CreateVehicleInput!): Vehicle!
+  updateVehicle(id: ID!, input: UpdateVehicleInput!): Vehicle!
+  deleteVehicle(id: ID!): Boolean!
+  updateVehicleStatus(id: ID!, status: VehicleStatus!): Vehicle!
+  updateFuelLevel(id: ID!, fuelLevel: Int!): Vehicle!
+  updateMileage(id: ID!, mileage: Int!): Vehicle!
+  
+  # Products
+  createProduct(input: CreateProductInput!): Product!
+  updateProduct(id: ID!, input: UpdateProductInput!): Product!
+  deleteProduct(id: ID!): Boolean!
+  
+  # Notifications
+  createNotification(
+    type: NotificationType!
+    title: String!
+    message: String!
+    action: ActionInput
+    metadata: MetadataInput
+  ): Notification!
+  markNotificationAsRead(id: ID!): Notification!
+  markAllNotificationsAsRead: Boolean!
+  deleteNotification(id: ID!): Boolean!
+}
+
+# ==========================
+# Subscriptions
+# ==========================
+
+type Subscription {
+  orderUpdated: Order!
+  vehicleUpdated: Vehicle!
+  productUpdated: Product!
+  notificationCreated: Notification!
+  statisticsUpdated: Statistics!
+}

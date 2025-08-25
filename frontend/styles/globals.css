@@ -1,0 +1,55 @@
+html[data-theme='dark'] body {
+  background: #141414;
+}
+
+html[data-theme='dark'] .ant-layout,
+html[data-theme='dark'] .ant-layout-content,
+html[data-theme='dark'] .ant-layout-header {
+  background: transparent !important;
+}
+
+/* Light theme: subtle gray backgrounds and softer cards */
+html[data-theme='light'] body {
+  background: #f5f6f8;
+}
+
+html[data-theme='light'] .ant-layout,
+html[data-theme='light'] .ant-layout-content,
+html[data-theme='light'] .ant-layout-header {
+  background: transparent !important;
+}
+
+/* Card wrappers to create "подложки" sections */
+.card-section {
+  background: #ffffff;
+  border: 1px solid #e6e8eb;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+/* Smaller cards with subtle borders */
+.card--subtle {
+  border: 1px solid #eef0f2 !important;
+  border-radius: 14px !important;
+}
+
+/* Make common components rounder */
+.ant-card {
+  border-radius: 16px;
+}
+.ant-btn,
+.ant-input,
+.ant-select-selector,
+.ant-picker,
+.ant-badge,
+.ant-tag,
+.ant-statistic,
+.ant-progress-inner {
+  border-radius: 12px !important;
+}
+
+/* Menu items slightly round */
+.ant-menu-item,
+.ant-menu-submenu-title {
+  border-radius: 10px;
+}

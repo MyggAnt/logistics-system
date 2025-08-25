@@ -1,0 +1,29 @@
+name: Test and Build
+
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cd backend && npm install
+      - run: cd backend && npm test
+
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cd frontend && npm install
+      - run: cd frontend && npm run build
+
+deploy:
+  needs: [test-backend, test-frontend]
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - run: yc serverless deploy --folder-id <your-folder-id>      

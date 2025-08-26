@@ -3,8 +3,6 @@ frontend/.next/
 frontend/node_modules/
 frontend/out/
 frontend/.env
-frontend/.env.local
-frontend/.env.production
 
 # Backend
 backend/node_modules/
@@ -21,9 +19,6 @@ backend/*.log
 *.gz
 *.node
 .env
-
-# Additional ignores
 .next/
 node_modules/
-next-env.d.ts
-frontend/next-env.d.ts
+EOF

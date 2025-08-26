@@ -36,6 +36,21 @@ app.set('io', io);
 app.use('/api/orders', ordersRouter);
 app.use('/api/vehicles', vehiclesRouter);
 
+app.get('/api', (req, res) => {
+  res.json({
+    message: '📦 Logistics System REST API',
+    version: '1.0.0',
+    endpoints: {
+      orders: '/api/orders',
+      vehicles: '/api/vehicles',
+      graphql: '/graphql',
+      health: '/health'
+    },
+    documentation: 'Use the specific endpoints to interact with the system.',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({

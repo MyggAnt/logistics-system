@@ -17,16 +17,16 @@ export class Vehicle {
   @Column()
   model!: string;
 
-  @Column()
+  @Column({ nullable: true }) 
   brand!: string;
 
-  @Column({ type: 'int' })
+  @Column({ nullable: true })
   year!: number;
 
   @Column({ type: 'int' })
   capacity!: number; // in kg
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ nullable: true })
   volumeCapacity?: number; // in cubic meters
 
   @Column({

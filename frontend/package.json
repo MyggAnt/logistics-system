@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
-    "@apollo/client": "^3.13.9",
+    "@apollo/client": "^3.14.0",
     "antd": "^5.16.1",
     "apollo-server-express": "^3.13.0",
     "graphql": "^16.11.0",
